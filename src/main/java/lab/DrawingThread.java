@@ -10,16 +10,16 @@ public class DrawingThread extends AnimationTimer {
 	private final Canvas canvas;
 	private final GraphicsContext gc;
 	private Scene scene;
-	private long lastSecond = 0;;
 	private int frameCount = 0;
 	private  int fps = 0;
 	private long lastTime;
+	private long lastSecond = 0;
 
 	public DrawingThread(Canvas canvas) {
 		this.canvas = canvas;
 		this.gc = canvas.getGraphicsContext2D();
 		scene = new Scene(canvas.getWidth(), canvas.getHeight());
-		lastSecond = System.nanoTime();
+		lastTime = System.nanoTime();
 	}
 
 	/**

@@ -28,7 +28,7 @@ public class Rock {
 		gc.save();
 		gc.setFill(Color.GRAY);
 		gc.setStroke(Color.GREEN);
-		Point2D center = position.add(size.getWidth()/2, size.getHeight()/2);
+		Point2D center = position.add(size.getWidth() / 2, size.getHeight() / 2);
 		Rotate rotateMatrix = Affine.rotate(angle, center.getX(), center.getY());
 		gc.setTransform(new Affine(rotateMatrix));
 		gc.fillRect(position.getX(), position.getY(), size.getWidth(), size.getHeight());
