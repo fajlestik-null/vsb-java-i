@@ -5,16 +5,15 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
-public class Background {
+public class Background extends WorldEntity {
 
-	private Scene scene;
 	private Point2D[] imagePosition;
 	private Image[] image;
 	private Point2D speed;
 	private static final double[] speedMultiplier = new double[] { 0.6, 0.8, 1, 1 };
 
 	public Background(Scene scene) {
-		this.scene = scene;
+		super(scene, new Point2D(0, 0));
 		image = new Image[4];
 		imagePosition = new Point2D[4];
 		image[0] = new Image(Background.class.getResourceAsStream("cityfar400.png"));
@@ -28,7 +27,8 @@ public class Background {
 		speed = new Point2D(100, 0);
 	}
 
-	public void draw(GraphicsContext gc) {
+	@Override
+	public void drawInternal(GraphicsContext gc) {
 		gc.setFill(Color.DARKBLUE);
 		gc.fillRect(0, 0, scene.getSize().getWidth(), scene.getSize().getHeight());
 		for (int i = 0; i < image.length; i++) {
@@ -44,6 +44,7 @@ public class Background {
 		}
 	}
 
+	@Override
 	public void simulate(double deltaTime) {
 		Point2D baseSpeed = speed.multiply(deltaTime / 1_000_000_000);
 		for (int i = 0; i < image.length; i++) {
