@@ -4,45 +4,56 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 public class DrawingThread extends AnimationTimer {
 
 	private final Canvas canvas;
 	private final GraphicsContext gc;
-	private Scene scene;
-	private int frameCount = 0;
-	private  int fps = 0;
-	private long lastTime;
-	private long lastSecond = 0;
+	private GameScene gameScene;
+    private long lastFrame = 0;
+
 
 	public DrawingThread(Canvas canvas) {
 		this.canvas = canvas;
 		this.gc = canvas.getGraphicsContext2D();
-		scene = new Scene(canvas.getWidth(), canvas.getHeight());
-		lastTime = System.nanoTime();
+        gameScene = new GameScene(canvas.getWidth(), canvas.getHeight());
 	}
 
-	/**
-	  * Draws objects into the canvas. Put you code here. 
-	 */
-	@Override
-	public void handle(long now) {
-		long timeDelta = now - lastTime;
-		scene.draw(gc);
-		scene.simulate(timeDelta);
-		long currentSecond = now / 1_000_000_000;
-		if(lastSecond == currentSecond) {
-			frameCount ++;
-		} else {
-			lastSecond = currentSecond;
-			fps = frameCount;
-			frameCount = 0;
-		}
-		lastTime = now;
-		//print FPS
-		gc.setStroke(Color.RED);
-		gc.strokeText(Integer.toString(fps), 10, 30);
-		gc.strokeText(Double.toString(1_000_000_000d/timeDelta), 10, 50);
-	}
+    /**
+     * Draws objects into the canvas. Put you code here.
+     */
+    @Override
+    public void handle(long now) {
+        double delta = lastFrame == 0 ? 0 : (now - lastFrame) / 1_000_000_000D;
+        lastFrame = now;
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
+        gameScene.draw(gc);
+        drawFps(delta);
+
+        gameScene.simulate(delta);
+    }
+
+    private void drawFps(double delta) {
+        int fps = calcFps(delta);
+        gc.setFont(new Font("Arial", 30));
+        gc.setFill(Color.WHITE);
+        gc.fillText(String.format("FPS: %04d", fps), 10, canvas.getHeight() - 10);
+    }
+
+    private double fpsSum = 0;
+    private double fpsCount = 0;
+    private int avergeFps = 0;
+
+    private int calcFps(double delta) {
+        fpsSum += 1 / delta;
+        fpsCount += 1;
+        if (fpsCount >= 100) {
+            avergeFps = (int) (fpsSum / fpsCount);
+            fpsSum = 0;
+            fpsCount = 0;
+        }
+        return avergeFps;
+    }
 }

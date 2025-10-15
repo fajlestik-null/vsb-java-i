@@ -1,15 +1,16 @@
 package lab;
 
 import javafx.geometry.Point2D;
+import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 
 public abstract class WorldEntity implements DrawableSimulable {
 
-	protected Scene scene;
+	protected GameScene gameScene;
 	protected Point2D position;
 
-	public WorldEntity(Scene scene, Point2D position) {
-		this.scene = scene;
+	protected WorldEntity(GameScene gameScene, Point2D position) {
+		this.gameScene = gameScene;
 		this.position = position;
 	}
 
@@ -17,8 +18,8 @@ public abstract class WorldEntity implements DrawableSimulable {
 		return position;
 	}
 
-	public Scene getScene() {
-		return scene;
+	public GameScene getGameScene() {
+		return gameScene;
 	}
 
 	@Override

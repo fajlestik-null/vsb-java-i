@@ -13,8 +13,8 @@ public class Boat extends WorldEntity implements Collisionable {
 	private Point2D speed;
 	private Image image;
 
-	public Boat(Scene scene, Point2D position) {
-		super(scene, position);
+	public Boat(GameScene gameScene, Point2D position) {
+		super(gameScene, position);
 		image = new Image(Boat.class.getResourceAsStream("ship-boat.gif"));
 		speed = new Point2D(0, 0);
 	}
@@ -27,7 +27,7 @@ public class Boat extends WorldEntity implements Collisionable {
 
 	@Override
 	public void simulate(double deltaTime) {
-		position = position.add(speed.multiply(deltaTime / 1_000_000_000));
+		position = position.add(speed.multiply(deltaTime));
 		speed = speed.multiply(0.99);
 	}
 
