@@ -1,13 +1,13 @@
 package lab;
 
-import javafx.geometry.Rectangle2D;
+import javafx.scene.shape.Polygon;
 
 public interface Collisionable {
 
-	Rectangle2D getBoundingBox();
+	Polygon getBoundingBox();
 
-	boolean intersect(Rectangle2D another);
+	boolean intersect(Polygon other);
 
-	void hitBy(Collisionable another);
+	void hitBy(Collisionable other);
 
 }

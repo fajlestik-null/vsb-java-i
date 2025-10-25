@@ -3,6 +3,7 @@ module lab01 {
     requires javafx.fxml;
     requires javafx.base;
   requires javafx.graphics;
-  opens lab to javafx.fxml;
+    requires java.desktop;
+    opens lab to javafx.fxml;
     exports lab;
 }

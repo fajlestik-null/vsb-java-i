@@ -1,26 +1,105 @@
 package lab;
 
 import javafx.geometry.Point2D;
-import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Shape;
 
-public abstract class WorldEntity implements DrawableSimulable {
+public abstract class WorldEntity implements DrawableSimulable, Warpable, Collisionable {
 
 	protected GameScene gameScene;
 	protected Point2D position;
+    protected Point2D velocity =  new Point2D(0, 0);
+    protected Polygon shape;
+    protected double rotationFactor = 3;
 
-	protected WorldEntity(GameScene gameScene, Point2D position) {
+	protected WorldEntity(GameScene gameScene, Point2D position, Polygon shape) {
 		this.gameScene = gameScene;
 		this.position = position;
+        this.shape = shape;
+        this.shape.setTranslateX(position.getX());
+        this.shape.setTranslateY(position.getY());
 	}
 
-	public Point2D getPosition() {
-		return position;
-	}
+//    public GameScene getGameScene() {
+//
+//        return gameScene;
+//    }
 
-	public GameScene getGameScene() {
-		return gameScene;
-	}
+    public Point2D getPosition() {
+        return position;
+    }
+
+    public Polygon getShape() {
+        return shape;
+    }
+
+    public void rotateLeft() {
+        this.shape.setRotate(this.shape.getRotate() -rotationFactor);
+    }
+
+    public void rotateRight() {
+        this.shape.setRotate(this.shape.getRotate() +rotationFactor);
+    }
+
+    public void move(double deltaTime){
+        //anti-spiking - měl by řešit problém s fps
+        double maxDelta = 0.05;
+        deltaTime = Math.min(deltaTime, maxDelta);
+
+        position = position.add(velocity.multiply(deltaTime));
+        position = warp(gameScene, position);
+
+        shape.setTranslateX(position.getX());
+        shape.setTranslateY(position.getY());
+    }
+
+    public void accelerate(double deltaTime) {
+        double angle = Math.toRadians(shape.getRotate());
+        double thrustPower = 200;
+
+        Point2D thrust = new Point2D(
+            Math.cos(angle) * thrustPower * deltaTime,
+            Math.sin(angle) * thrustPower * deltaTime
+        );
+
+        velocity = velocity.add(thrust);
+    }
+
+    public void applyDrag(double deltaTime) {
+        double dragFactor = Math.pow(0.995, deltaTime * 60); // scale drag by frame
+        velocity = velocity.multiply(dragFactor);
+
+        if (velocity.magnitude() < 0.5) {
+            velocity = new Point2D(0, 0);
+        }
+    }
+
+    public Polygon getBoundingBox() {
+        Polygon bounds = new Polygon();
+        double angle = Math.toRadians(shape.getRotate());
+
+        for (int i = 0; i < shape.getPoints().size(); i += 2) {
+            double x = shape.getPoints().get(i);
+            double y = shape.getPoints().get(i + 1);
+
+            double rotatedX = x * Math.cos(angle) - y * Math.sin(angle);
+            double rotatedY = x * Math.sin(angle) + y * Math.cos(angle);
+
+            rotatedX += position.getX();
+            rotatedY += position.getY();
+
+            bounds.getPoints().addAll(rotatedX, rotatedY);
+        }
+
+        return bounds;
+    }
+
+    @Override
+    public boolean intersect(Polygon other) {
+        return (Shape.intersect(this.getShape(), other)).getBoundsInLocal().getWidth() != -1;
+    }
 
 	@Override
 	public final void draw(GraphicsContext gc) {
@@ -29,5 +108,26 @@ public abstract class WorldEntity implements DrawableSimulable {
 		gc.restore();
 	}
 
-	public abstract void drawInternal(GraphicsContext gc);
+    public void drawInternal(GraphicsContext gc) {
+        gc.translate(position.getX(), position.getY());
+
+        gc.rotate(shape.getRotate());
+
+        double[] xPoints = new double[shape.getPoints().size() / 2];
+        double[] yPoints = new double[shape.getPoints().size() / 2];
+
+        for (int i = 0; i < shape.getPoints().size(); i += 2) {
+            xPoints[i / 2] = shape.getPoints().get(i);
+            yPoints[i / 2] = shape.getPoints().get(i + 1);
+        }
+
+        //Draw only the outline - vector based asteroids
+        //gc.setStroke(getColor());
+        //gc.strokePolygon(xPoints, yPoints, xPoints.length);
+        gc.setFill(getColor());
+        gc.fillPolygon(xPoints, yPoints, xPoints.length);
+    }
+
+    public abstract Color getColor();
+
 }

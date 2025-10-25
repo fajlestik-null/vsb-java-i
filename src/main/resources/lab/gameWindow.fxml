@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="600" prefWidth="800" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lab.GameController">
+    <top>
+        <BorderPane style="-fx-background-color: #8aa3b1;" BorderPane.alignment="CENTER">
+            <center>
+                <Label fx:id="score" alignment="CENTER" text="SCORE: 0" textFill="WHITE" BorderPane.alignment="CENTER">
+                    <BorderPane.margin>
+                        <Insets right="40.0" />
+                    </BorderPane.margin>
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+            </center>
+            <left>
+                <Label fx:id="lives" text="Lives: 3" textFill="#f5d1d1" BorderPane.alignment="TOP_LEFT">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+            </left>
+        </BorderPane>
+    </top>
+
+    <center>
+        <Canvas fx:id="canvas" height="600.0" width="800.0" />
+    </center>
+</BorderPane>
