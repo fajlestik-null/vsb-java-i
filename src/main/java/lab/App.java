@@ -13,36 +13,34 @@ import javafx.stage.WindowEvent;
  * @author Java I
  */
 public class App extends Application {
-    private GameController gameController;
 
     public static void main(String[] args) {
         launch(args);
     }
 
+
     @Override
     public void start(Stage primaryStage) {
         try {
-            FXMLLoader gameLoader = new FXMLLoader(getClass().getResource("/lab/gameWindow.fxml"));
-            Parent root = gameLoader.load();
-            GameController gameController = gameLoader.getController();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/lab/gameMainMenu.fxml"));
+            Parent root = loader.load();
+
             Scene scene = new Scene(root);
             String css = this.getClass().getResource("/lab/application.css").toExternalForm();
             scene.getStylesheets().add(css);
+
             primaryStage.setScene(scene);
-            primaryStage.resizableProperty().set(false);
-            primaryStage.setTitle("Java 1 - 6th laboratory");
+            primaryStage.setResizable(false);
+            primaryStage.setTitle("Main Menu");
             primaryStage.show();
-            // Exit program when main window is closed
+
             primaryStage.setOnCloseRequest(this::exitProgram);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    @Override
-    public void stop() throws Exception {
-        gameController.stop();
-        super.stop();
-    }
+
     private void exitProgram(WindowEvent evt) {
         System.exit(0);
     }
