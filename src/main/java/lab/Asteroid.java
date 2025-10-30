@@ -8,9 +8,12 @@ import java.util.Random;
 public class Asteroid extends WorldEntity{
     private double rotationSpeed;
     private double points;
+    private double size;
 
     public Asteroid(GameScene gameScene, Point2D position, double size){
         super(gameScene,position ,new AsteroidFactory().createAsteroid(size));
+
+        this.size = size;
 
         Random rand = new Random();
         double speed = 20 + rand.nextDouble() * 40;
@@ -47,6 +50,10 @@ public class Asteroid extends WorldEntity{
             gameScene.getPlayer().addScore(points);
             gameScene.getPlayer().fireScore();
         }
+    }
+
+    public double getSize() {
+        return size;
     }
 
 //    public double getPoints(){

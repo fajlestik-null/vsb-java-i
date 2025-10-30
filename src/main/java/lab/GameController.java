@@ -50,7 +50,13 @@ public class GameController {
                 GameOverController controller = loader.getController();
                 controller.setFinalScore((int) gameScene.getPlayer().getScore());
 
-                stage.setScene(new Scene(gameOverRoot));
+                Scene gameOverScene = new Scene(gameOverRoot);
+
+                gameOverScene.getStylesheets().add(
+                    getClass().getResource("/lab/application.css").toExternalForm()
+                );
+
+                stage.setScene(gameOverScene);
                 stage.setTitle("Game Over");
                 stage.show();
 

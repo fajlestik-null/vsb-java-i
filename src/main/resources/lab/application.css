@@ -1,1 +1,11 @@
-/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+#mainMenu{
+    -fx-background-image: url("mainMenuBackground.png");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+}
+
+#gameOver{
+    -fx-background-image: url("gameOverBackground.png");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+}

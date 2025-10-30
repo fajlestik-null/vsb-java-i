@@ -40,6 +40,6 @@ public class Bullet extends WorldEntity{
     }
 
     public boolean isAfterDelay(){
-        return delay > 0.5;
+        return delay > 1.5;
     }
 }

@@ -1,6 +1,7 @@
 package lab;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -22,6 +23,8 @@ public class GameScene {
     private double asteroidSpawnTimer = 0;
     private double asteroidSpawnInterval = 2.0;
     private double difficultyTimer = 0;
+    private Comparator<DrawableSimulable> comparator;
+
 
 
 
@@ -33,6 +36,33 @@ public class GameScene {
         for(int i = 0; i < 10; i++){
             spawnAsteroid();
         }
+
+        comparator = new Comparator<DrawableSimulable>() {
+            @Override
+            public int compare(DrawableSimulable o1, DrawableSimulable o2) {
+                if (o1 == o2) {
+                    return 0;
+                }
+                if (o1 instanceof Player) {
+                    return 1;
+                }
+                if (o2 instanceof Player) {
+                    return -1;
+                }
+                if (o1 instanceof Bullet) {
+                    return -1;
+                }
+                if (o2 instanceof Bullet) {
+                    return 1;
+                }
+                if (o1 instanceof Asteroid a1 && o2 instanceof Asteroid a2) {
+                    return Double.compare(a1.getSize(), a2.getSize());
+                }
+                return 0;
+            }
+        };
+        comparator = comparator.reversed();
+        entities.sort(comparator);
     }
 
     public Dimension2D getSize() {
@@ -119,6 +149,7 @@ public class GameScene {
         }
         entities.removeAll(entitiesToRemove);
         entitiesToRemove.clear();
+        entities.sort(comparator);
     }
 
     public Player getPlayer() {

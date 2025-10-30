@@ -122,8 +122,8 @@ public abstract class WorldEntity implements DrawableSimulable, Warpable, Collis
         }
 
         //Draw only the outline - vector based asteroids
-        //gc.setStroke(getColor());
-        //gc.strokePolygon(xPoints, yPoints, xPoints.length);
+        gc.setStroke(Color.BLACK);
+        gc.strokePolygon(xPoints, yPoints, xPoints.length);
         gc.setFill(getColor());
         gc.fillPolygon(xPoints, yPoints, xPoints.length);
     }
