@@ -10,11 +10,16 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 
 public class GameController {
     private DrawingThread timer;
     private GameScene gameScene;
-    private Stage stage;
+    private App app;
+    private boolean gameOverTriggered = false;
+
+
 
     @FXML
     private Canvas canvas;
@@ -39,32 +44,11 @@ public class GameController {
 
         canvas.addEventHandler(KeyEvent.KEY_RELEASED, e -> gameScene.keyReleased(e.getCode()));
     }
-    private void gameOver() {
-        stop();
 
-        Platform.runLater(() -> {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/lab/gameOver.fxml"));
-                Parent gameOverRoot = loader.load();
-
-                GameOverController controller = loader.getController();
-                controller.setFinalScore((int) gameScene.getPlayer().getScore());
-
-                Scene gameOverScene = new Scene(gameOverRoot);
-
-                gameOverScene.getStylesheets().add(
-                    getClass().getResource("/lab/application.css").toExternalForm()
-                );
-
-                stage.setScene(gameOverScene);
-                stage.setTitle("Game Over");
-                stage.show();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
+    public void startGame() {
+        timer = new DrawingThread(canvas, gameScene);
+        timer.start();
+        }
 
 
     public void stop() {
@@ -79,12 +63,20 @@ public class GameController {
     public void changeLives()
     {
         lives.setText("LIVES: "+ gameScene.getPlayer().getLives());
-        if (gameScene.getPlayer().getLives() <= 0) {
-            gameOver();
+        if (!gameOverTriggered && gameScene.getPlayer().getLives() <= 0) {
+            gameOverTriggered = true;
+            stop();
+            Platform.runLater(() -> {
+                try {
+                    app.switchToGameOver((int) gameScene.getPlayer().getScore());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         }
     }
 
-    public void setStage(Stage stage) {
-        this.stage = stage;
+    public void setApp(App app) {
+        this.app = app;
     }
 }

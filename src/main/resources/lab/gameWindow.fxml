@@ -8,24 +8,28 @@
 
 <BorderPane prefHeight="600" prefWidth="800" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lab.GameController">
     <top>
-        <BorderPane style="-fx-background-color: #8aa3b1;" BorderPane.alignment="CENTER">
+        <BorderPane prefHeight="52.0" prefWidth="800.0" style="-fx-background-color: #8aa3b1;" BorderPane.alignment="CENTER">
             <center>
-                <Label fx:id="score" alignment="CENTER" text="SCORE: 0" textFill="WHITE" BorderPane.alignment="CENTER">
-                    <BorderPane.margin>
-                        <Insets right="40.0" />
-                    </BorderPane.margin>
-                    <font>
-                        <Font name="System Bold" size="18.0" />
-                    </font>
-                </Label>
+            <BorderPane BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets right="40.0" />
+               </BorderPane.margin>
+               <center>
+                      <Label fx:id="score" alignment="CENTER" text="SCORE: 0" textFill="WHITE">
+                          <font>
+                              <Font name="8-bit Arcade In" size="36.0" />
+                          </font>
+                      </Label>
+               </center>
+               <left>
+                      <Label fx:id="lives" text="Lives: 3" textFill="#f5d1d1" BorderPane.alignment="CENTER">
+                          <font>
+                              <Font name="8-bit Arcade In" size="36.0" />
+                          </font>
+                      </Label>
+               </left>
+            </BorderPane>
             </center>
-            <left>
-                <Label fx:id="lives" text="Lives: 3" textFill="#f5d1d1" BorderPane.alignment="TOP_LEFT">
-                    <font>
-                        <Font name="System Bold" size="18.0" />
-                    </font>
-                </Label>
-            </left>
         </BorderPane>
     </top>
 

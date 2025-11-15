@@ -8,26 +8,38 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 
+import java.io.IOException;
+
 public class MainMenuController {
+
+    private App app;
+
+    @FXML
+    private Button play;
+
+    @FXML
+    private Button scoreboard;
 
     @FXML
     private void startGame(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/lab/gameWindow.fxml"));
-            Parent gameRoot = loader.load();
-
-            GameController gameController = loader.getController();
-
-            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            gameController.setStage(stage);
-
-            Scene gameScene = new Scene(gameRoot);
-            stage.setScene(gameScene);
-            stage.setTitle("Asteroids");
-            stage.show();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            app.switchToGame();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+    }
+
+    @FXML
+    private void openScoreboard()
+    {
+        try {
+            app.switchToScoreboard();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void setApp(App app) {
+        this.app = app;
     }
 }
