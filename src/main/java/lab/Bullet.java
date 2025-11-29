@@ -6,7 +6,6 @@ import javafx.scene.shape.Polygon;
 
 public class Bullet extends WorldEntity{
     private double lifetime = 2.0;
-    private double delay;
 
     public Bullet(GameScene gameScene, Point2D position, double angle)
     {
@@ -33,13 +32,8 @@ public class Bullet extends WorldEntity{
         applyDrag(deltaTime);
 
         lifetime -= deltaTime;
-        delay += deltaTime;
             if (lifetime <= 0) {
             gameScene.removeEntity(this);
         }
-    }
-
-    public boolean isAfterDelay(){
-        return delay > 1.5;
     }
 }

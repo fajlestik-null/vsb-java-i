@@ -1,11 +1,7 @@
 package lab;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 
 import java.io.IOException;
@@ -18,14 +14,32 @@ public class MainMenuController {
     private Button play;
 
     @FXML
+    private Button load;
+
+    @FXML
     private Button scoreboard;
 
     @FXML
     private void startGame(ActionEvent event) {
         try {
-            app.switchToGame();
+            app.switchToGame(null);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    private void loadGame(ActionEvent event) {
+        GameScene loadedScene = SaveManager.loadGame("GAME_SAVE.bin");
+
+        if (loadedScene != null) {
+            try {
+                app.switchToGame(loadedScene);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            System.out.println("Game cannot be loaded.");
         }
     }
 

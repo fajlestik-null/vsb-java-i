@@ -19,6 +19,15 @@
                 </font>
             </Button>
 
+            <Button fx:id="load" mnemonicParsing="false"
+                    style="-fx-background-color: #8aa3b1;"
+                    text="LOAD GAME" textAlignment="CENTER" textFill="WHITE"
+                    onAction="#loadGame">
+                <font>
+                    <Font name="System Bold" size="12.0" />
+                </font>
+            </Button>
+
             <Button fx:id="play" mnemonicParsing="false"
                     style="-fx-background-color: #8aa3b1;"
                     text="PLAY" textAlignment="CENTER" textFill="WHITE"

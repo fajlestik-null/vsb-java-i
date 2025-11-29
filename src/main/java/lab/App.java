@@ -49,18 +49,29 @@ public class App extends Application {
     private void exitProgram(WindowEvent evt) {
         System.exit(0);
     }
-    public void switchToGame() throws IOException {
-        // Construct a main window with a canvas.
+    public void switchToGame(GameScene loadedScene) throws IOException {
         FXMLLoader gameLoader = new FXMLLoader(getClass().getResource("gameWindow.fxml"));
         Parent root = gameLoader.load();
+
         gameController = gameLoader.getController();
         gameController.setApp(this);
+
         Scene scene = new Scene(root);
         URL cssUrl = getClass().getResource("application.css");
         scene.getStylesheets().add(cssUrl.toString());
         primaryStage.setScene(scene);
-        gameController.startGame();
+
+        // ZMĚNA: Rozhodování, zda startujeme novou hru, nebo načítáme uloženou
+        if (loadedScene != null) {
+            // Máme uloženou hru -> předáme ji
+            gameController.startGame(loadedScene);
+        } else {
+            // Nemáme uloženou hru (loadedScene je null) -> vytvoříme novou
+            // Pozor: Zde musíš zadat rozměry plátna (např. podle velikosti okna)
+            gameController.startGame(new GameScene(800, 600));
+        }
     }
+
     public void switchToMenu() throws IOException {
         // Construct a main window with a canvas.
         FXMLLoader menuLoader = new FXMLLoader(getClass().getResource("gameMainMenu.fxml"));

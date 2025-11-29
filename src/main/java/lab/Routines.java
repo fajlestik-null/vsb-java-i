@@ -2,8 +2,6 @@ package lab;
 
 public class Routines {
 
-	
-	
 	public static void sleep(int timeInMilisenonds) {
 		try {
 			Thread.sleep(timeInMilisenonds);
@@ -11,7 +9,7 @@ public class Routines {
 			Thread.currentThread().interrupt();
 		}
 	}
-	
+
 	public static boolean isEndOfThreadRequestedByJavaVM() {
 		return Thread.interrupted();
 	}

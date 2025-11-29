@@ -10,6 +10,13 @@
     -fx-background-position: center;
 }
 
+
+#scoreboardPanel{
+    -fx-background-image: url("scoreboardBackground.png");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+}
+
 .text-field .text {
     -fx-fill: #ffffff;
 }
@@ -38,7 +45,7 @@
 }
 
 #scoreTable {
-    -fx-background-color: rgba(255, 255, 255, 0.9); /* semi-transparent white */
+    -fx-background-color: rgba(255, 255, 255, 0.5); /* semi-transparent white */
     -fx-border-color: #8aa3b1;
     -fx-border-width: 2;
     -fx-border-radius: 10;
@@ -63,7 +70,7 @@
 }
 
 #scoreTable .table-row-cell {
-    -fx-background-color: rgba(255, 255, 255, 0.7); /* light rows for readability */
+    -fx-background-color: rgba(255, 255, 255, 0.3); /* light rows for readability */
     -fx-text-fill: #333;
 }
 

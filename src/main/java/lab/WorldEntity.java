@@ -6,26 +6,74 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 
-public abstract class WorldEntity implements DrawableSimulable, Warpable, Collisionable {
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class WorldEntity implements DrawableSimulable, Warpable, Collisionable, Serializable {
 
 	protected GameScene gameScene;
-	protected Point2D position;
-    protected Point2D velocity =  new Point2D(0, 0);
-    protected Polygon shape;
+
+    protected transient Point2D position;
+    protected transient Point2D velocity;
+    protected transient Polygon shape;
+
     protected double rotationFactor = 3;
+    protected double angularVelocity = 0;
+    protected double rotationPower = 200;
 
 	protected WorldEntity(GameScene gameScene, Point2D position, Polygon shape) {
 		this.gameScene = gameScene;
 		this.position = position;
+        this.velocity = new Point2D(0, 0);
         this.shape = shape;
         this.shape.setTranslateX(position.getX());
         this.shape.setTranslateY(position.getY());
 	}
 
-//    public GameScene getGameScene() {
-//
-//        return gameScene;
-//    }
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+
+        out.writeDouble(position.getX());
+        out.writeDouble(position.getY());
+
+        out.writeDouble(velocity.getX());
+        out.writeDouble(velocity.getY());
+
+        out.writeDouble(angularVelocity);
+
+        out.writeDouble(shape.getRotate());
+        List<Double> points = new ArrayList<>(shape.getPoints());
+        out.writeObject(points);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject(); // Načte netransientní data
+
+        double posX = in.readDouble();
+        double posY = in.readDouble();
+        this.position = new Point2D(posX, posY);
+
+        double velX = in.readDouble();
+        double velY = in.readDouble();
+        this.velocity = new Point2D(velX, velY);
+
+        this.angularVelocity = in.readDouble();
+
+        double rotate = in.readDouble();
+        List<Double> points = (List<Double>) in.readObject();
+
+        this.shape = new Polygon();
+        this.shape.getPoints().addAll(points);
+        this.shape.setRotate(rotate);
+
+        this.shape.setTranslateX(posX);
+        this.shape.setTranslateY(posY);
+    }
 
     public Point2D getPosition() {
         return position;
@@ -35,12 +83,24 @@ public abstract class WorldEntity implements DrawableSimulable, Warpable, Collis
         return shape;
     }
 
-    public void rotateLeft() {
-        this.shape.setRotate(this.shape.getRotate() -rotationFactor);
+    public void rotateLeft(double deltaTime) {
+        this.angularVelocity -= rotationPower * deltaTime;
     }
 
-    public void rotateRight() {
-        this.shape.setRotate(this.shape.getRotate() +rotationFactor);
+    public void rotateRight(double deltaTime) {
+        this.angularVelocity += rotationPower * deltaTime;
+    }
+
+    public void applyRotationPhysics(double deltaTime) {
+        this.shape.setRotate(this.shape.getRotate() + angularVelocity * deltaTime);
+
+        //drag - čím vyšší číslo tím měnší drag
+        double dragFactor = Math.pow(0.95, deltaTime * 60);
+        this.angularVelocity *= dragFactor;
+
+        if (Math.abs(angularVelocity) < 0.5) {
+            angularVelocity = 0;
+        }
     }
 
     public void move(double deltaTime){
@@ -50,6 +110,8 @@ public abstract class WorldEntity implements DrawableSimulable, Warpable, Collis
 
         position = position.add(velocity.multiply(deltaTime));
         position = warp(gameScene, position);
+
+        applyRotationPhysics(deltaTime);
 
         shape.setTranslateX(position.getX());
         shape.setTranslateY(position.getY());
