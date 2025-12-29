@@ -47,7 +47,6 @@ public class App extends Application {
         try {
             switchToMenu();
             primaryStage.show();
-            // Exit program when main window is closed
             primaryStage.setOnCloseRequest(this::exitProgram);
         } catch (Exception e) {
             e.printStackTrace();
