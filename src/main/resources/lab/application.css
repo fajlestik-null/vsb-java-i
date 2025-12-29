@@ -1,18 +1,18 @@
 #mainMenu{
-    -fx-background-image: url("mainMenuBackground.png");
+    -fx-background-image: url("images/mainMenuBackground.png");
     -fx-background-size: cover;
     -fx-background-position: center;
 }
 
 #gameOver{
-    -fx-background-image: url("gameOverBackground.png");
+    -fx-background-image: url("images/gameOverBackground.png");
     -fx-background-size: cover;
     -fx-background-position: center;
 }
 
 
 #scoreboardPanel{
-    -fx-background-image: url("scoreboardBackground.png");
+    -fx-background-image: url("images/scoreboardBackground.png");
     -fx-background-size: cover;
     -fx-background-position: center;
 }

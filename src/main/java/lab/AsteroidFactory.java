@@ -4,8 +4,9 @@ import javafx.scene.shape.Polygon;
 import java.util.Random;
 
 public class AsteroidFactory {
+    private static final Random RANDOM = new Random();
+
     public Polygon createAsteroid(double size) {
-        Random rand = new Random();
 
         Polygon polygon = new Polygon();
         double c1 = Math.cos(Math.PI * 2 / 5);
@@ -20,11 +21,23 @@ public class AsteroidFactory {
             -1 * size * c2, size * s2,
             size * c1, size * s1);
 
-        for (int i = 0; i < polygon.getPoints().size(); i++) {
-            int change = rand.nextInt(5) - 2;
-            polygon.getPoints().set(i, polygon.getPoints().get(i) + change);
-        }
+        polygon.getPoints().
+            replaceAll(aDouble -> aDouble + RANDOM.nextInt(5) - 2);
+        return polygon;
+    }
 
+    public Polygon createCrater(double size) {
+        Polygon polygon = new Polygon();
+        int points = 5 + RANDOM.nextInt(2);
+
+        for (int i = 0; i < points; i++) {
+            double angle = i * (Math.PI * 2 / points);
+            double radius = size * (0.8 + RANDOM.nextDouble() * 0.4);
+
+            double x = Math.cos(angle) * radius;
+            double y = Math.sin(angle) * radius;
+            polygon.getPoints().addAll(x, y);
+        }
         return polygon;
     }
 }

@@ -1,29 +1,24 @@
 package lab;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class GameOverController {
     private App app;
     private int scoreToSave;
-    private List<String> academicWorkers =new ArrayList<>();
-    private Random rand = new Random();
+    private static final Random RANDOM = new Random();
 
 
     @FXML
     private Label finalScore;
+
+    @FXML
+    private Button exit;
 
     @FXML
     private TextField nameField;
@@ -45,58 +40,35 @@ public class GameOverController {
         return name.toLowerCase();
     }
 
-    private boolean isWorker(String name)
-    {
+    private boolean isWorker(String name) {
         String normalizedName = normalizeName(name);
         String[] nameSectioned = normalizedName.split(" ");
 
-        if(nameSectioned.length < 2)
-        {
+        if (nameSectioned.length < 2) {
             return false;
         }
 
-        for(String worker:academicWorkers){
-            String normalizedWorker = normalizeName(worker);
-            String[] workerSectioned = normalizedWorker.split(" ");
+        List<String> workers = app.getAcademicWorkers();
 
-            if(nameSectioned[0].equals(workerSectioned[0]) && nameSectioned[1].equals(workerSectioned[1])
-            || nameSectioned[1].equals(workerSectioned[0]) && nameSectioned[0].equals(workerSectioned[1]))
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return workers.stream()
+            .map(this::normalizeName) // Transform worker names
+            .map(n -> n.split(" "))   // Split them
+            .anyMatch(workerSectioned ->
+                // Check if names match (normal or swapped)
+                (nameSectioned[0].equals(workerSectioned[0]) && nameSectioned[1].equals(workerSectioned[1])) ||
+                    (nameSectioned[1].equals(workerSectioned[0]) && nameSectioned[0].equals(workerSectioned[1]))
+            );
     }
 
     public void setApp(App app) {
         this.app = app;
+
+        app.buttonHoverSound(exit);
     }
 
     @FXML
     private void onBackToMenu() {
-
-        String url="https://www.fei.vsb.cz/460/cs/kontakt/lide/";
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(new URI(url).toURL().openStream()))){
-            String fileContent = in.lines().collect(Collectors.joining("\n"));
-
-            Pattern p = Pattern.compile("<a[^>]*>([^<]+)</a>");
-            Matcher m = p.matcher(fileContent);
-
-            while (m.find()) {
-                String name = m.group(1).trim();
-
-                String[] checker = name.split(" ");
-
-                // Filtering (Name has at least 2 words and second word starts with uppercase)
-                if (checker.length >= 2 && Character.isUpperCase(checker[1].charAt(0)))
-                {
-                    academicWorkers.add(name);
-                }
-            }
-        } catch (IOException | URISyntaxException e) {
-            e.printStackTrace();
-        }
+        app.buttonClickSound();
 
         String name = nameField.getText().trim();
         if (name.isEmpty()) {
@@ -107,8 +79,8 @@ public class GameOverController {
 
         if(isWorker(name))
         {   System.out.println("Be careful, academic worker is present!");
-            System.out.println("Bribe function was activated.");
-             score = new Score(name, scoreToSave+rand.nextInt(10000));
+            System.out.println("Bribe function has been activated.");
+             score = new Score(name, scoreToSave+RANDOM.nextInt(10000));
 
         }
         else
@@ -130,7 +102,8 @@ public class GameOverController {
         try {
             ScoreManager.save(scores);
         } catch (ScoreException e) {
-            throw new RuntimeException(e);
+            System.err.println("Failed to save high scores: " + e.getMessage());
+            e.printStackTrace();
         }
 
         try {

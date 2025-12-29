@@ -18,12 +18,14 @@ public class Bullet extends WorldEntity{
 
     @Override
     public Color getColor() {
-        return Color.RED;
+        return Color.PURPLE;
     }
 
     @Override
     public void hitBy(Collisionable other) {
-        //not used
+        if (other instanceof Scorable target) {
+            gameScene.getPlayer().addScore(target.getScore());
+        }
     }
 
     @Override
@@ -32,7 +34,8 @@ public class Bullet extends WorldEntity{
         applyDrag(deltaTime);
 
         lifetime -= deltaTime;
-            if (lifetime <= 0) {
+        if (lifetime <= 0)
+        {
             gameScene.removeEntity(this);
         }
     }

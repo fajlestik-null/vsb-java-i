@@ -2,6 +2,7 @@ package lab;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -14,6 +15,9 @@ public class ScoreboardController {
     private App app;
 
     @FXML
+    private Button exit;
+
+    @FXML
     private TableView<Score> scoreTable;
 
     @FXML
@@ -22,8 +26,11 @@ public class ScoreboardController {
     @FXML
     private TableColumn<Score, Integer> scoreColumn;
 
+
+
     public void setApp(App app) {
         this.app = app;
+        app.buttonHoverSound(exit);
         loadScores();
     }
 
@@ -36,12 +43,14 @@ public class ScoreboardController {
             scoreColumn.setSortType(TableColumn.SortType.DESCENDING);
             scoreTable.sort();
         } catch (ScoreException e) {
-            throw new RuntimeException(e);
+            System.err.println("Could not load scores: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     @FXML
     private void onBackToMenu() {
+        app.buttonClickSound();
         try {
             app.switchToMenu();
         } catch (IOException e) {
@@ -54,7 +63,7 @@ public class ScoreboardController {
         nickColumn.setCellValueFactory(new PropertyValueFactory<>("nickName"));
         scoreColumn.setCellValueFactory(new PropertyValueFactory<>("score"));
 
-        scoreTable.setRowFactory(tv -> new TableRow<Score>() {
+        scoreTable.setRowFactory(tv -> new TableRow<>() {
             @Override
             protected void updateItem(Score item, boolean empty) {
                 super.updateItem(item, empty);

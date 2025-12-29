@@ -1,5 +1,4 @@
 package lab;
-//RuntimeException - donuté mě použít try..catch block
 public class ScoreException extends Exception {
     public ScoreException(String message) {
         super(message);

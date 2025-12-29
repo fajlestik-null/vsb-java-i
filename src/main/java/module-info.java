@@ -1,5 +1,6 @@
 module lab01 {
     requires transitive javafx.controls;
+    requires javafx.media;
     requires javafx.fxml;
     requires javafx.base;
   requires javafx.graphics;

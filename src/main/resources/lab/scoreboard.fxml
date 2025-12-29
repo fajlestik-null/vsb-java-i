@@ -9,16 +9,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="scoreboardPanel" prefHeight="400.0" prefWidth="600.0"
-            xmlns="http://javafx.com/javafx/25"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="lab.ScoreboardController"
-            style="-fx-background-color: #1a1a1a;">
+<BorderPane fx:id="scoreboardPanel" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #1a1a1a;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lab.ScoreboardController">
 
     <top>
-        <Label styleClass="arcadeText" text="SCOREBOARD" style="-fx-font-size: 60px" textFill="WHITE" BorderPane.alignment="CENTER">
+        <Label style="-fx-font-size: 60px" styleClass="arcadeText" text="SCOREBOARD" textFill="WHITE" BorderPane.alignment="CENTER">
             <BorderPane.margin>
-                <Insets top="20.0"/>
+                <Insets top="20.0" />
             </BorderPane.margin>
         </Label>
     </top>
@@ -26,22 +22,20 @@
     <center>
         <TableView fx:id="scoreTable" opacity="0.9" BorderPane.alignment="CENTER">
             <columns>
-                <TableColumn fx:id="nickColumn" text="Nick Name" prefWidth="237"/>
-                <TableColumn fx:id="scoreColumn" text="Score" prefWidth="236"/>
+                <TableColumn fx:id="nickColumn" prefWidth="237" text="Nick Name" />
+                <TableColumn fx:id="scoreColumn" prefWidth="236" text="Score" />
             </columns>
             <BorderPane.margin>
-                <Insets top="20" bottom="20" left="50" right="50"/>
+                <Insets bottom="20" left="50" right="50" top="20" />
             </BorderPane.margin>
         </TableView>
     </center>
 
     <bottom>
         <VBox alignment="CENTER" spacing="20" BorderPane.alignment="CENTER">
-            <Button fx:id="backButton" text="BACK TO MENU" mnemonicParsing="false"
-                    style="-fx-background-color: #8aa3b1; -fx-text-fill: WHITE; -fx-background-radius: 10;"
-                    onAction="#onBackToMenu">
+            <Button fx:id="exit" mnemonicParsing="false" onAction="#onBackToMenu" style="-fx-background-color: #8aa3b1; -fx-text-fill: WHITE; -fx-background-radius: 10;" text="BACK TO MENU">
                 <font>
-                    <Font name="System Bold" size="24.0"/>
+                    <Font name="System Bold" size="24.0" />
                 </font>
             </Button>
         </VBox>

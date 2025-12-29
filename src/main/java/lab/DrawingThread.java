@@ -4,13 +4,12 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 public class DrawingThread extends AnimationTimer {
 
 	private final Canvas canvas;
 	private final GraphicsContext gc;
-	private GameScene gameScene;
+	private final GameScene gameScene;
     private long lastFrame = 0;
 
 
@@ -33,32 +32,5 @@ public class DrawingThread extends AnimationTimer {
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         gameScene.draw(gc);
-        drawFps(delta);
-    }
-
-//    public GameScene getGameScene() {
-//        return gameScene;
-//    }
-
-    private void drawFps(double delta) {
-        int fps = calcFps(delta);
-        gc.setFont(new Font("Arial", 30));
-        gc.setFill(Color.WHITE);
-        gc.fillText(String.format("FPS: %04d", fps), 10, canvas.getHeight() - 10);
-    }
-
-    private double fpsSum = 0;
-    private double fpsCount = 0;
-    private int averageFps = 0;
-
-    private int calcFps(double delta) {
-        fpsSum += 1 / delta;
-        fpsCount += 1;
-        if (fpsCount >= 100) {
-            averageFps = (int) (fpsSum / fpsCount);
-            fpsSum = 0;
-            fpsCount = 0;
-        }
-        return averageFps;
     }
 }

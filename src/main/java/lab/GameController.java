@@ -1,17 +1,17 @@
 package lab;
 
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyEvent;
-import javafx.stage.Stage;
+import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 
 
 public class GameController {
@@ -34,7 +34,6 @@ public class GameController {
 
     @FXML
     void initialize() {
-
         canvas.setFocusTraversable(true);
 
         canvas.addEventHandler(KeyEvent.KEY_PRESSED, e -> {
@@ -52,6 +51,8 @@ public class GameController {
 
     @FXML
     private void saveGame() {
+        app.buttonClickSound();
+
         if (gameScene != null) {
             SaveManager.saveGame(gameScene, "GAME_SAVE.bin");
             System.out.println("Game was successfully saved!");
@@ -74,9 +75,18 @@ public class GameController {
 
         p.addLivesListener(this::changeLives);
         p.addScoreListener(this::changeScore);
+        p.addDoublePointsListener(this::updateScoreColor);
+
+        this.updateScoreColor(p.isDoublePointsActive());
 
         changeLives();
         changeScore();
+
+        save.setDisable(true);
+
+        PauseTransition btnDelay = new PauseTransition(Duration.seconds(3));
+        btnDelay.setOnFinished(e -> save.setDisable(false));
+        btnDelay.play();
 
         timer = new DrawingThread(canvas, gameScene);
         timer.start();
@@ -107,8 +117,18 @@ public class GameController {
                 try {
                     app.switchToGameOver((int) gameScene.getPlayer().getScore());
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    throw new UncheckedIOException("Failed to load game over screen", e);
                 }
+            }
+        });
+    }
+
+    private void updateScoreColor(boolean active) {
+        Platform.runLater(() -> {
+            if (active) {
+                score.setTextFill(Color.YELLOW);
+            } else {
+                score.setTextFill(Color.WHITE);
             }
         });
     }
@@ -116,5 +136,7 @@ public class GameController {
     public void setApp(App app)
     {
         this.app = app;
+
+        app.buttonHoverSound(save);
     }
 }

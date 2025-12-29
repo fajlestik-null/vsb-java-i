@@ -16,7 +16,7 @@
                   <Insets right="40.0" />
                </BorderPane.margin>
                <center>
-                      <Label fx:id="score" alignment="CENTER" text="SCORE: 0" textFill="WHITE">
+                      <Label fx:id="score" alignment="CENTER" text="SCORE: 0">
                           <font>
                               <Font name="8-bit Arcade In" size="36.0" />
                           </font>

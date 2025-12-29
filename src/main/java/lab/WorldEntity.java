@@ -9,11 +9,12 @@ import javafx.scene.shape.Shape;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class WorldEntity implements DrawableSimulable, Warpable, Collisionable, Serializable {
+public abstract class WorldEntity implements DrawableSimulable, Warpable, Collisionable, Soundable, Serializable {
 
 	protected GameScene gameScene;
 
@@ -21,7 +22,6 @@ public abstract class WorldEntity implements DrawableSimulable, Warpable, Collis
     protected transient Point2D velocity;
     protected transient Polygon shape;
 
-    protected double rotationFactor = 3;
     protected double angularVelocity = 0;
     protected double rotationPower = 200;
 
@@ -34,6 +34,7 @@ public abstract class WorldEntity implements DrawableSimulable, Warpable, Collis
         this.shape.setTranslateY(position.getY());
 	}
 
+    @Serial
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
 
@@ -50,9 +51,10 @@ public abstract class WorldEntity implements DrawableSimulable, Warpable, Collis
         out.writeObject(points);
     }
 
+    @Serial
     @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject(); // Načte netransientní data
+        in.defaultReadObject();
 
         double posX = in.readDouble();
         double posY = in.readDouble();
@@ -94,7 +96,6 @@ public abstract class WorldEntity implements DrawableSimulable, Warpable, Collis
     public void applyRotationPhysics(double deltaTime) {
         this.shape.setRotate(this.shape.getRotate() + angularVelocity * deltaTime);
 
-        //drag - čím vyšší číslo tím měnší drag
         double dragFactor = Math.pow(0.95, deltaTime * 60);
         this.angularVelocity *= dragFactor;
 

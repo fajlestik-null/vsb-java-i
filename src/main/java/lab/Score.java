@@ -1,17 +1,14 @@
 package lab;
 
-public class Score {
-    private String nickName;
-    private int score;
-    public Score(String nickName, int score) {
-        this.nickName = nickName;
-        this.score = score;
-    }
+import java.io.Serializable;
+
+public record Score(String nickName, int scorePoints) implements Serializable{
 
     public String getNickName() {
-        return nickName;
+        return nickName();
     }
+
     public int getScore() {
-        return score;
+        return scorePoints();
     }
 }
