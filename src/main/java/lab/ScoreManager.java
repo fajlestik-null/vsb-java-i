@@ -2,6 +2,7 @@ package lab;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,16 +11,15 @@ import java.util.List;
 
 public class ScoreManager {
 
-    // PROBLEM 1: Add a private constructor to hide the implicit public one
-    // This prevents anyone from writing 'new ScoreManager()' since this is a utility class.
+    private static final String FILE_NAME = "scoreboard.csv";
+
     private ScoreManager() {
         throw new IllegalStateException("Utility class");
     }
 
     public static void save(List<Score> scores) throws ScoreException {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter("scoreboard.csv"))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_NAME))) {
             for (Score score : scores) {
-                // Note: Ensure your Score record/class has .scorePoints() or .getScore()
                 bw.write(String.format("%s;%d", score.nickName(), score.scorePoints()));
                 bw.newLine();
             }
@@ -30,11 +30,22 @@ public class ScoreManager {
 
     public static List<Score> load() throws ScoreException {
         List<Score> result = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader("scoreboard.csv"))) {
+        File file = new File(FILE_NAME);
+        if (!file.exists()) {
+            try {
+                boolean created = file.createNewFile();
+                if (created) {
+                    System.out.println("Created new empty scoreboard file: " + FILE_NAME);
+                }
+                return result;
+            } catch (IOException e) {
+                throw new ScoreException("Could not create new scoreboard file: " + e.getMessage(), e);
+            }
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(FILE_NAME))) {
             String line;
-            // Standard way to read lines in a loop
             while ((line = br.readLine()) != null) {
-                // PROBLEM 2: Extracted nested try-block logic to a separate method
                 result.add(parseScoreLine(line));
             }
         } catch (IOException e) {
@@ -43,8 +54,7 @@ public class ScoreManager {
         return result;
     }
 
-    // Helper method to handle parsing logic and exceptions
-    private static Score parseScoreLine(String line) throws ScoreException {
+   private static Score parseScoreLine(String line) throws ScoreException {
         String[] parts = line.split(";");
         if (parts.length != 2) {
             throw new ScoreException("Wrong number of columns in line: " + line);

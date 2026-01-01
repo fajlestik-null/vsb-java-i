@@ -25,7 +25,8 @@ public class MainMenuController {
         try {
             app.switchToGame(null);
         } catch (IOException e) {
-            throw new UncheckedIOException("Failed to load game screen", e);        }
+            throw new UncheckedIOException("Failed to load game screen", e);
+        }
     }
 
     @FXML
@@ -40,7 +41,7 @@ public class MainMenuController {
                 throw new UncheckedIOException("Failed to load game scene from save", e);
             }
         } else {
-            System.out.println("Game cannot be loaded. (Probably different code version)");
+            System.out.println("Game cannot be loaded. (Probably different code version or no save to load)");
         }
     }
 
@@ -50,8 +51,9 @@ public class MainMenuController {
         app.buttonClickSound();
        try {
             app.switchToScoreboard();
-        } catch (IOException e) {
-           throw new UncheckedIOException("Failed to load scoreboard", e);        }
+       } catch (IOException e) {
+           throw new UncheckedIOException("Failed to load scoreboard", e);
+       }
     }
 
     public void setApp(App app) {

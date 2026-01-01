@@ -10,10 +10,18 @@ public interface Warpable {
         double windowWidth = gameScene.getSize().getWidth();
         double windowHeight = gameScene.getSize().getHeight();
 
-        if (x < 0) x += windowWidth;
-        if (x > windowWidth) x -= windowWidth;
-        if (y < 0) y += windowHeight;
-        if (y > windowHeight) y -= windowHeight;
+        if (x < 0) {
+            x += windowWidth;
+        }
+        if (x > windowWidth) {
+            x -= windowWidth;
+        }
+        if (y < 0) {
+            y += windowHeight;
+        }
+        if (y > windowHeight) {
+            y -= windowHeight;
+        }
 
         return new Point2D(x, y);
     }

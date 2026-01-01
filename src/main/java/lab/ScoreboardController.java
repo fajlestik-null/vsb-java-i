@@ -69,7 +69,7 @@ public class ScoreboardController {
                 super.updateItem(item, empty);
 
                 if (item == null || empty) {
-                    setStyle(""); // Reset style
+                    setStyle("");
                 } else {
                     int index = getIndex();
                     switch (index) {

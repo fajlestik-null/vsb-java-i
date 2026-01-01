@@ -42,7 +42,7 @@ public class App extends Application {
     public void start(Stage primaryStage) {
         new Thread(this::loadAcademicWorkers).start();
         preloadResources();
-        loadCustomFonts();
+
         this.primaryStage = primaryStage;
         try {
             switchToMenu();
@@ -135,10 +135,9 @@ public class App extends Application {
                     String[] checker = name.split(" ");
 
                     if (checker.length >= 2 && Character.isUpperCase(checker[1].charAt(0))) {
-                            synchronized (academicWorkers)
-                            {
-                                academicWorkers.add(name);
-                            }
+                        synchronized (academicWorkers) {
+                            academicWorkers.add(name);
+                        }
                     }
                 }
             } catch (Exception e) {
@@ -150,12 +149,10 @@ public class App extends Application {
         return academicWorkers;
     }
 
-    private void loadCustomFonts() {
-        Font.loadFont(getClass().getResourceAsStream("fonts/ARCADE_FULL.ttf"), 43);
-    }
-
     private void preloadResources() {
         System.out.println("Preloading resources...");
+
+        Font.loadFont(getClass().getResourceAsStream("fonts/ARCADE_FULL.ttf"), 43);
 
         ResourceManager.getImage(getClass(), "images/explosion.gif");
         ResourceManager.getImage(getClass(), "images/thrustFlame.gif");
@@ -179,13 +176,14 @@ public class App extends Application {
         ResourceManager.getAudioClip(getClass(), "audio/singleShot.wav");
         ResourceManager.getAudioClip(getClass(), "audio/TripleShot.mp3");
 
-
         System.out.println("Resources preloaded successfully.");
     }
 
     private void playMusic(String name) {
         Media media = ResourceManager.getMedia(getClass(), name);
-        if (media == null) return;
+        if (media == null){
+            return;
+        }
 
         if (musicPlayer != null) {
             Media current = musicPlayer.getMedia();

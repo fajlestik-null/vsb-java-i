@@ -81,13 +81,13 @@ public class GameScene implements Serializable {
 
     private void initComparator() {
         comparator = ((Comparator<DrawableSimulable>) (o1, o2) -> {
-            if (o1 == o2) return 0;
-            if (o1 instanceof Explosion || o2 instanceof Player || o1 instanceof Bullet)
-            {
+            if (o1 == o2) {
+                return 0;
+            }
+            if (o1 instanceof Explosion || o2 instanceof Player || o1 instanceof Bullet) {
                 return -1;
             }
-            if (o2 instanceof Explosion || o1 instanceof Player || o2 instanceof Bullet)
-            {
+            if (o2 instanceof Explosion || o1 instanceof Player || o2 instanceof Bullet) {
                 return 1;
             }
             if (o1 instanceof Asteroid a1 && o2 instanceof Asteroid a2) {
@@ -105,7 +105,9 @@ public class GameScene implements Serializable {
     }
 
     public void draw(GraphicsContext gc) {
-        if (background != null) background.draw(gc);
+        if (background != null) {
+            background.draw(gc);
+        }
         entities.stream().forEach(entity -> entity.draw(gc));
 
         if (startDelayTimer > 0) {
@@ -183,8 +185,7 @@ public class GameScene implements Serializable {
                 if (e1 instanceof Collisionable c1 && e2 instanceof Collisionable c2 && c1.intersect(c2.getBoundingBox())) {
                         c1.hitBy(c2);
                         c2.hitBy(c1);
-                    }
-
+                }
             }
         }
 
@@ -212,8 +213,7 @@ public class GameScene implements Serializable {
         return pressedKeys.contains(key);
     }
 
-    public void removeEntity(WorldEntity worldEntity)
-    {
+    public void removeEntity(WorldEntity worldEntity) {
         entitiesToRemove.add(worldEntity);
     }
 }

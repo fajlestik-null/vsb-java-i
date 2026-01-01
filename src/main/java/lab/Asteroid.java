@@ -124,12 +124,9 @@ public class Asteroid extends WorldEntity implements Scorable {
         for (int i = 0; i < numberOfParts; i++) {
             Asteroid smallAsteroid;
 
-            if (RANDOM.nextDouble() < 0.15)
-            {
+            if (RANDOM.nextDouble() < 0.15){
                 smallAsteroid = new PowerUpAsteroid(gameScene, this.position, newSize);
-            }
-            else
-            {
+            } else {
                 smallAsteroid = new Asteroid(gameScene, this.position, newSize);
             }
 

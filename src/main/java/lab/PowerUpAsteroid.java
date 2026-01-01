@@ -31,8 +31,7 @@ public class PowerUpAsteroid extends Asteroid{
             gameScene.getPlayer().fireScore();
 
             spawnPowerUp();
-        }
-        else if (other instanceof Player) {
+        } else if (other instanceof Player) {
             super.hitBy(other);
             createExplosion();
             spawnPowerUp();

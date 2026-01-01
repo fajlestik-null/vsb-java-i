@@ -136,15 +136,13 @@ public class Player extends WorldEntity {
         if (gameScene.isKeyPressed(KeyCode.SPACE) && timeSinceLastShot >= currentDelay) {
                 shoot();
                 timeSinceLastShot = 0;
-            }
-
+        }
 
         move(deltaTime);
         applyDrag(deltaTime);
     }
 
-    private void loadImage()
-    {
+    private void loadImage(){
         this.flameImage = ResourceManager.getImage(getClass(), "images/thrustFlame.gif");
     }
 
@@ -211,7 +209,9 @@ public class Player extends WorldEntity {
     }
 
     protected void fireDoublePointsChanged(boolean active) {
-        if (doublePointsListeners == null) return;
+        if (doublePointsListeners == null) {
+            return;
+        }
         for (DoublePointsListener listener : doublePointsListeners) {
             listener.onDoublePointsChanged(active);
         }
@@ -238,23 +238,26 @@ public class Player extends WorldEntity {
         scoreListeners.add(scoreListener);
     }
 
-    protected void fireScore()    {
-        if (scoreListeners == null) return;
+    protected void fireScore() {
+        if (scoreListeners == null) {
+            return;
+        }
         for (ScoreListener scoreListener : scoreListeners) {
             scoreListener.scoreChanged();
         }
     }
 
-    public void addLivesListener(LivesListener livesListener)    {
+    public void addLivesListener(LivesListener livesListener) {
         if (livesListeners == null) {
             livesListeners = new LinkedList<>();
         }
         livesListeners.add(livesListener);
     }
 
-    protected void fireLives()
-    {
-        if (livesListeners == null) return;
+    protected void fireLives() {
+        if (livesListeners == null) {
+            return;
+        }
         for (LivesListener livesListener : livesListeners) {
             livesListener.livesChanged();
         }

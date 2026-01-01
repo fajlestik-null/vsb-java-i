@@ -107,7 +107,9 @@ public class GameController {
 
     public void changeLives() {
         Platform.runLater(() -> {
-            if (gameScene == null) return;
+            if (gameScene == null) {
+                return;
+            }
 
             lives.setText("LIVES: " + gameScene.getPlayer().getLives());
 

@@ -105,7 +105,6 @@ public abstract class WorldEntity implements DrawableSimulable, Warpable, Collis
     }
 
     public void move(double deltaTime){
-        //anti-spiking - měl by řešit problém s fps
         double maxDelta = 0.05;
         deltaTime = Math.min(deltaTime, maxDelta);
 
@@ -184,7 +183,6 @@ public abstract class WorldEntity implements DrawableSimulable, Warpable, Collis
             yPoints[i / 2] = shape.getPoints().get(i + 1);
         }
 
-        //Draw only the outline - vector based asteroids
         gc.setStroke(Color.BLACK);
         gc.strokePolygon(xPoints, yPoints, xPoints.length);
         gc.setFill(getColor());

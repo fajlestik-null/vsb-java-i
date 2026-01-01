@@ -29,12 +29,10 @@ public class GameOverController {
     }
 
     private String normalizeName(String name) {
-        //set as case-insensitive, then find expression that contains (...) and replace them with ""(nothing)
         name = name.replaceAll("(?i)(doc\\.|ing\\.|mgr\\.|ph\\.d\\.|phd|prof\\.|bc\\.)", "");
 
         name = name.replace(",", "");
 
-        // find white characters, where there are multiple next to each other (1+) and replace them with " "
         name = name.trim().replaceAll("\\s+", " ");
 
         return name.toLowerCase();
@@ -51,8 +49,8 @@ public class GameOverController {
         List<String> workers = app.getAcademicWorkers();
 
         return workers.stream()
-            .map(this::normalizeName) // Transform worker names
-            .map(n -> n.split(" "))   // Split them
+            .map(this::normalizeName)
+            .map(n -> n.split(" "))
             .anyMatch(workerSectioned ->
                 // Check if names match (normal or swapped)
                 (nameSectioned[0].equals(workerSectioned[0]) && nameSectioned[1].equals(workerSectioned[1])) ||
@@ -77,14 +75,11 @@ public class GameOverController {
 
         Score score;
 
-        if(isWorker(name))
-        {   System.out.println("Be careful, academic worker is present!");
+        if(isWorker(name)) {
+            System.out.println("Be careful, academic worker is present!");
             System.out.println("Bribe function has been activated.");
              score = new Score(name, scoreToSave+RANDOM.nextInt(10000));
-
-        }
-        else
-        {
+        } else {
             score = new Score(name, scoreToSave);
         }
 

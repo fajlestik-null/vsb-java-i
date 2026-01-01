@@ -7,8 +7,7 @@ import javafx.scene.shape.Polygon;
 public class Bullet extends WorldEntity{
     private double lifetime = 2.0;
 
-    public Bullet(GameScene gameScene, Point2D position, double angle)
-    {
+    public Bullet(GameScene gameScene, Point2D position, double angle) {
         super(gameScene, position, new Polygon(2, -2, 2, 2, -2, 2, -2, -2));
         this.shape.setRotate(angle);
 
@@ -29,13 +28,12 @@ public class Bullet extends WorldEntity{
     }
 
     @Override
-    public void simulate(double deltaTime){
+    public void simulate(double deltaTime) {
         move(deltaTime);
         applyDrag(deltaTime);
 
         lifetime -= deltaTime;
-        if (lifetime <= 0)
-        {
+        if (lifetime <= 0) {
             gameScene.removeEntity(this);
         }
     }
